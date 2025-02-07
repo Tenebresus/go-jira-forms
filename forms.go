@@ -26,7 +26,6 @@ type FormService struct {
     Jira_api_token string
     Jira_base_url string
     Jira_api_base_url string
-    Http_client *http.Client
     Cloud_id string
 }
 
