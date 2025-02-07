@@ -23,30 +23,30 @@ type formIdRes struct {
 }
 
 type FormService struct {
-    username string
-    jira_api_token string
-    jira_base_url string
-    jira_api_base_url string
-    http_client *http.Client
-    cloud_id string
+    Username string
+    Jira_api_token string
+    Jira_base_url string
+    Jira_api_base_url string
+    Http_client *http.Client
+    Cloud_id string
 }
 
 // Uses the fields of the struct to make a request to the _edge/tenant_info endpoint to retrieve the cloudId and set the corresponding field to the
 // value
-func (formservice *FormService) setCloudId() {
+func (formservice *FormService) SetCloudId() {
 
     resstring := formservice.request("_edge/tenant_info", false)
 
     var cir cloudIdRes
 
     json.Unmarshal(resstring, &cir)
-    formservice.cloud_id = cir.CloudId
+    formservice.Cloud_id = cir.CloudId
 
 }
 
-func (formService FormService) getIssueFormId(issueKey string) string {
+func (formService FormService) GetIssueFormId(issueKey string) string {
 
-    resstring := formService.request("forms/cloud/" + formService.cloud_id + "/issue/" + issueKey + "/form", true)
+    resstring := formService.request("forms/cloud/" + formService.Cloud_id + "/issue/" + issueKey + "/form", true)
 
     var fir formIdRes
     json.Unmarshal(resstring[1:len(resstring) - 1], &fir)
@@ -55,9 +55,9 @@ func (formService FormService) getIssueFormId(issueKey string) string {
 
 }
 
-func (formService FormService) getIssueForm(issueKey string, formId string) {
+func (formService FormService) GetIssueForm(issueKey string, formId string) {
 
-    resstring := formService.request("forms/cloud/" + formService.cloud_id + "/issue/" + issueKey + "/form/" + formId, true)
+    resstring := formService.request("forms/cloud/" + formService.Cloud_id + "/issue/" + issueKey + "/form/" + formId, true)
 
     fmt.Println(string(resstring))
 
@@ -68,13 +68,13 @@ func (formservice FormService) request(uri string, api_request bool) []byte {
     base_url := ""
 
     if api_request {
-        base_url = formservice.jira_api_base_url
+        base_url = formservice.Jira_api_base_url
     } else {
-        base_url = formservice.jira_base_url
+        base_url = formservice.Jira_base_url
     }
 
     req, _ := http.NewRequest("GET", base_url + uri, nil)
-    req.SetBasicAuth(formservice.username, formservice.jira_api_token)
+    req.SetBasicAuth(formservice.Username, formservice.Jira_api_token)
 
     res, _ := http.DefaultClient.Do(req)
     resstring, _ := io.ReadAll(res.Body)
