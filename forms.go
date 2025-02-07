@@ -2,7 +2,6 @@ package forms
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 
 	"net/http"
@@ -55,11 +54,10 @@ func (formService FormService) GetIssueFormId(issueKey string) string {
 
 }
 
-func (formService FormService) GetIssueForm(issueKey string, formId string) {
+func (formService FormService) GetIssueForm(issueKey string, formId string) []byte {
 
     resstring := formService.request("forms/cloud/" + formService.Cloud_id + "/issue/" + issueKey + "/form/" + formId, true)
-
-    fmt.Println(string(resstring))
+    return resstring
 
 }
 
